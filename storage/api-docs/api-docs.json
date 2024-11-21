@@ -1,0 +1,432 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Food Order Laravel API",
+        "version": "1.0"
+    },
+    "paths": {
+        "/food-order/foods": {
+            "get": {
+                "tags": [
+                    "Food Order"
+                ],
+                "summary": "Get all foods",
+                "description": "Retrieve all available foods",
+                "operationId": "getAllFoods",
+                "parameters": [
+                    {
+                        "name": "categoryId",
+                        "in": "query",
+                        "description": "ID of the category",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "foodName",
+                        "in": "query",
+                        "description": "Name of the food",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "pageSize",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "pageNumber",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sortBy",
+                        "in": "query",
+                        "description": "Sort by attribute",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "foodname"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "asc",
+                        "in": "query",
+                        "description": "Sort in ascending order",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "total": {
+                                            "type": "integer",
+                                            "example": "8"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "foodId": {
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "categories": {
+                                                        "properties": {
+                                                            "categoryId": {
+                                                                "type": "integer",
+                                                                "example": "1"
+                                                            },
+                                                            "categoryName": {
+                                                                "type": "string",
+                                                                "example": "Dinner"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "foodName": {
+                                                        "type": "string",
+                                                        "example": "Nasi Goreng"
+                                                    },
+                                                    "foodPrice": {
+                                                        "type": "integer",
+                                                        "example": "12000"
+                                                    },
+                                                    "imageUrl": {
+                                                        "type": "string",
+                                                        "example": "https://asset.kompas.com/crops/DWvs7cEUvVQ-luk5M1X74elzNSM=/0x0:498x332/780x390/data/photo/2020/02/07/5e3d3ae57251e.jpg"
+                                                    },
+                                                    "is_favorite": {
+                                                        "type": "boolean",
+                                                        "example": "true"
+                                                    },
+                                                    "is_cart": {
+                                                        "type": "boolean",
+                                                        "example": "true"
+                                                    },
+                                                    "userId": {
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Berhasil memuat Makanan"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/food-order/cart": {
+            "post": {
+                "tags": [
+                    "Food Order"
+                ],
+                "summary": "Add item to cart",
+                "description": "Add an item to the user's cart",
+                "operationId": "addToCart",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "foodId"
+                                ],
+                                "properties": {
+                                    "foodId": {
+                                        "type": "integer",
+                                        "example": "123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Item successfully added to cart"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/food-order/foods/{foodId}/favorites": {
+            "put": {
+                "tags": [
+                    "Food Order"
+                ],
+                "summary": "Toggle favorite item",
+                "description": "Toggle favorite status of the specified food item",
+                "operationId": "toggleFavorite",
+                "parameters": [
+                    {
+                        "name": "foodId",
+                        "in": "path",
+                        "description": "ID of the food item",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Favorite status toggled successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/food-order/cart/{cartId}": {
+            "delete": {
+                "tags": [
+                    "Food Order"
+                ],
+                "summary": "Delete item from cart",
+                "description": "Delete an item from the user's cart",
+                "operationId": "deleteFromCart",
+                "parameters": [
+                    {
+                        "name": "cartId",
+                        "in": "path",
+                        "description": "ID of the item in the cart",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item successfully deleted from cart"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/user-management/users/signin": {
+            "post": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Sign in user",
+                "description": "Sign in user and generate authentication token",
+                "operationId": "signin",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "example": "john_doe"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "JWT_token"
+                                                },
+                                                "type": {
+                                                    "type": "string",
+                                                    "example": "Bearer"
+                                                },
+                                                "username": {
+                                                    "type": "string",
+                                                    "example": "john_doe"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "users"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Login successful"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid credentials"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 401
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to create token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to create token"
+                                        },
+                                        "statusCode": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user-management/users/sign-up": {
+            "post": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Sign up new user",
+                "description": "Create a new user account",
+                "operationId": "signup",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "Username",
+                                    "Password"
+                                ],
+                                "properties": {
+                                    "Username": {
+                                        "type": "string",
+                                        "example": "john_doe"
+                                    },
+                                    "Password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User successfully registered"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        }
+    }
+}
