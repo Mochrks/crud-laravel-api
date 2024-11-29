@@ -33,6 +33,7 @@ class UserServices
             $user->fullname = $fullname;
             $user->password = Hash::make($password);
             $user->is_deleted = false;
+            $user->created_by = $username;
             $user->created_time = now();
             $user->modified_time = now();
             $user->save();
